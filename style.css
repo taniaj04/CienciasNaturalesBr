@@ -60,15 +60,17 @@ p {
 
 .info-container {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .info-box {
     background-color: rgba(13, 143, 80, 0.685);
     color: white;
     padding: 20px;
-    width: 100%;
+    width: 90%;
+    max-width: 600px; 
     border-radius: 50px;
     text-align: center; 
     display: flex;
