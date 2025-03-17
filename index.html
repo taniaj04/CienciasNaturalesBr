@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌿 Ciencias Naturales</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="title-box">
+            <h1>🌿 Bienvenidos al juego de Ciencias Naturales 🌎</h1>
+        </div>
+        <p>Explora y adquiere más conocimientos respecto a la ciencia. Lee las instrucciones y elige el juego según tu nivel educativo.</p>
+        
+        <div class="info-container">
+            <div class="info-box">
+                <h2>Bachillerato</h2>
+                <p>En este juego pondrás a prueba tu conocimiento respecto al ciclo del agua.</p>
+                <br>
+                <p>Para empezar recordemos un poco más sobre el ciclo del agua...</p>
+                <p>El ciclo del agua es un proceso natural que describe cómo el agua se mueve a través de la Tierra. Comienza con la evaporación del agua de océanos, ríos y lagos hacia la atmósfera, luego se condensa formando nubes. Después, el agua regresa a la Tierra en forma de precipitación, como lluvia o nieve, para finalmente llegar a ríos y mares, donde el ciclo comienza de nuevo. </p>
+                <p>¿Sabes cuál es el primer paso del ciclo? ¡Demuestra lo que sabes y gana el juego!</p>
+                </p>
+                <br>
+                <p>¿Listo para empezar el juego?</p>
+                <a href="javascript:void(0)" class="button" onclick="playSoundAndRedirect()">Empezar Juego</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const startSound = new Audio('sonido.mp3');
+        
+        function playSoundAndRedirect() {
+            startSound.play(); 
+            startSound.onended = () => {
+                window.location.href = "bachillerato.html";
+            };
+        }
+    </script>
+</body>
+</html>

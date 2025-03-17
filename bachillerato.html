@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciclo del agua</title>
+    <link rel="stylesheet" href="bachillerato.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Desafío del Ciclo del Agua</h1>
+        <p>¿Qué tanto sabes sobre el ciclo del agua? ¡Buena suerte!</p>
+        <div id="game-container">
+            <div id="question-container">
+                <div class="question-box">
+                    <h2 id="question"></h2>
+                </div>
+                <div class="options"></div>
+            </div>
+            <div id="feedback"></div>
+            <button id="next-btn" class="button" onclick="nextQuestion()" style="display: none;">➡️ Siguiente</button>
+        </div>
+        <button class="button" onclick="resetGame()">Reiniciar</button>
+        <button class="button" onclick="exitGame()">Salir</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let currentQuestionIndex = 0;
+        let shuffledQuestions = [];
+        let currentStage = 1;
+
+        const questionsStage1 = [
+            {
+                question: "¿Cuál es la primera etapa del ciclo del agua?",
+                correct: "Evaporación",
+                options: ["Evaporación", "Condensación", "Precipitación", "Infiltración"]
+            },
+            {
+                question: "¿Qué etapa forma las nubes?",
+                correct: "Condensación",
+                options: ["Evaporación", "Condensación", "Precipitación", "Filtración"]
+            },
+            {
+                question: "¿Qué ocurre cuando las gotas se hacen más grandes?",
+                correct: "Precipitación",
+                options: ["Evaporación", "Condensación", "Precipitación", "Infiltración"]
+            }
+        ];
+
+        const questionsStage2 = [
+            {
+                question: "¿Qué tipo de agua participa en el ciclo del agua?",
+                correct: "Agua dulce y salada",
+                options: ["Agua dulce", "Agua salada", "Agua dulce y salada", "Agua subterránea"]
+            },
+            {
+                question: "¿Qué acción es causada por la gravedad?",
+                correct: "Infiltración",
+                options: ["Evaporación", "Condensación", "Infiltración", "Transpiración"]
+            },
+            {
+                question: "¿Qué impulsa el ciclo del agua?",
+                correct: "El sol",
+                options: ["La gravedad", "El sol", "El viento", "La luna"]
+            }
+        ];
+
+        const questionContainer = document.getElementById("question-container");
+        const questionText = document.getElementById("question");
+        const optionsContainer = document.querySelector(".options");
+        const feedback = document.getElementById("feedback");
+        const nextBtn = document.getElementById("next-btn");
+        const correctSound = new Audio('correct.mp3');
+    const incorrectSound = new Audio('incorrect.mp3');
+    const nextSound = new Audio('next.mp3');
+    const resetSound = new Audio('reset.mp3');
+    const exitSound = new Audio('sonido.mp3');
+
+
+        let incorrectAttempts = 0; 
+
+        function startGame() {
+            shuffledQuestions = shuffleArray(currentStage === 1 ? questionsStage1 : questionsStage2);
+            currentQuestionIndex = 0;
+            score = 0;
+            incorrectAttempts = 0; 
+            feedback.textContent = "";
+            nextBtn.style.display = "none";
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const currentQuestion = shuffledQuestions[currentQuestionIndex];
+            questionText.textContent = currentQuestion.question;
+
+            const shuffledOptions = shuffleArray([...currentQuestion.options]);
+
+            optionsContainer.innerHTML = "";
+            shuffledOptions.forEach(option => {
+                const button = document.createElement("button");
+                button.className = "option";
+                button.textContent = option;
+                button.onclick = () => checkAnswer(option);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selected) {
+            const currentQuestion = shuffledQuestions[currentQuestionIndex];
+            const correctAnswer = currentQuestion.correct;
+
+            if (selected === correctAnswer) {
+                feedback.textContent = "✅ ¡Correcto!";
+                feedback.style.color = "green";
+                nextBtn.style.display = "inline-block";
+                score += 10;
+            } else {
+                incorrectAttempts++; 
+                feedback.textContent = "❌ Incorrecto. La respuesta era: " + correctAnswer;
+                feedback.style.color = "red";
+
+                if (incorrectAttempts >= 2) {
+                    if (currentStage === 1) {
+                        setTimeout(() => {
+                            alert("Has cometido 2 errores en la primera etapa. El juego se reiniciará.");
+                            resetGame();
+                        }, 1000);
+                    } else if (currentStage === 2) {
+                        setTimeout(() => {
+                            alert("Has cometido 2 errores en la segunda etapa. Volveremos a intentarlo en la etapa 2.");
+                            resetStage2(); 
+                        }, 1000);
+                    }
+                } else {
+                    setTimeout(() => {
+                        alert("¡Respuesta incorrecta! Te queda un intento.");
+                    }, 1000);
+                }
+            }
+        }
+
+        function nextQuestion() {
+    nextSound.play(); 
+    currentQuestionIndex++;
+    nextBtn.style.display = "none";
+
+    if (currentQuestionIndex >= shuffledQuestions.length) {
+        if (currentStage === 1) {
+            currentStage = 2;
+            feedback.textContent = "¡Primera parte completada! Ahora vamos a la segunda parte.";
+            setTimeout(startGame, 2000); 
+        } else if (currentStage === 2) {
+            feedback.textContent = `🎉 ¡El juego ha terminado con éxito! Puntuación final: 5.0`;  
+            questionContainer.style.display = "none";
+        }
+    } else {
+        showQuestion();
+    }
+}
+
+
+        function resetGame() {
+    resetSound.play(); 
+    currentStage = 1;
+    shuffledQuestions = shuffleArray(questionsStage1);
+    currentQuestionIndex = 0;
+    score = 0;
+    incorrectAttempts = 0;
+    feedback.textContent = "";
+    nextBtn.style.display = "none";
+    questionContainer.style.display = "block";
+    showQuestion();
+}
+
+function resetStage2() {
+    resetSound.play(); 
+    currentStage = 2;
+    shuffledQuestions = shuffleArray(questionsStage2);
+    currentQuestionIndex = 0;
+    incorrectAttempts = 0;
+    feedback.textContent = "";
+    nextBtn.style.display = "none";
+    showQuestion();
+}
+
+
+        function exitGame() {
+    exitSound.play(); 
+    if (confirm("¿Seguro que quieres salir del juego?")) {
+        window.location.href = "index.html";
+    }
+}
+
+
+        function shuffleArray(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        startGame(); 
+    </script>
+</body>
+</html>
